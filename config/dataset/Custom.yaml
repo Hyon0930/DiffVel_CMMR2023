@@ -1,0 +1,8 @@
+name: 'Custom'
+args:
+    audio_path: 'my_audio'
+    audio_ext: 'mp3'
+    max_segment_samples: 327680
+    sample_rate: 16000
+num_samples: 4
+    

@@ -1,0 +1,66 @@
+gpus: 1
+val_freq: 5
+hop_length: 512
+sequence_length: 327680
+sampling_rate: 16000
+min_midi: 21
+max_midi: 108
+learning_rate: 1e-5
+epochs: 2500
+download: False
+pin_memory: True
+
+# Place your trained model ckpt file here.
+comp_modelckpt: 'path/to/model/ClassifierFreeDiffRoll-L15-C512-beta0.02-x_0-cfdg_ddpm_x0-w=0-p=0-k=9-dia=2-4-MAESTRO/version_1/checkpoints/last.ckpt'
+# Set your path to output inference result.
+inference_result_path: "path/to/output/inference_result/Diffvel_originalFilm/"
+# Set the SMD dataset path. 
+SMD_data_root: 'path/to/h5SMD/'
+# Set the path to output error profile from the inference. 
+pair_pkl_dir:  "path/to/output/pair_pkl"
+# Set the list of nunmbers for time shift in second. 
+unaligned_shift: [0] #Audio to Score(MIDI frame roll) shift in second. 
+# Following parameters are fixed for the model. Do not touch.   
+test_hopseconds: 20. # Not to overlap 20 sec audio data. i.e. the audio length for input data in second.  
+frames_per_second: 31 # MIDI resolution per second; Fixed
+
+
+dataloader:
+    train:
+        batch_size: 16
+        num_workers: 40
+        shuffle: True
+        pin_memory: ${pin_memory}
+        prefetch_factor: 2
+        persistent_workers: True
+    val:
+        batch_size: 16
+        num_workers: 4
+        shuffle: False
+        pin_memory: ${pin_memory}
+    test:
+        batch_size: 4
+        num_workers: 4
+        shuffle: False
+        pin_memory: ${pin_memory}
+        
+        
+trainer:
+    gpus: ${gpus}
+    max_epochs: ${epochs}
+    check_val_every_n_epoch: ${val_freq}
+    
+modelcheckpoint:
+    monitor: 'Val/diffusion_loss'
+    filename: '{epoch:02d}e-diffusion_loss{Train/diffusion_loss:.2f}'
+    save_top_k: 2
+    save_last: True
+    mode: "min"
+    auto_insert_metric_name: False    
+    
+defaults:
+    - spec: mel
+    - model: ClassifierFreeDiffRoll
+    - task: classifierfree_diffusion
+    - dataset: MAESTRO
+

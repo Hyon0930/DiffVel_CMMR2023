@@ -1,0 +1,11 @@
+gpus: 1
+checkpoint_path: './outputs/2022-07-21/21-35-36/diffusion_dim=28-channels=1-huber-MAESTRO/version_1/checkpoints/last.ckpt'
+shape:
+- 640
+- 88
+
+defaults:
+    - model: Unet
+        
+trainer:
+    gpus: ${gpus}
