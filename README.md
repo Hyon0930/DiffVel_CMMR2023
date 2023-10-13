@@ -38,7 +38,8 @@ python train_spec_roll.py gpus=1 model.args.kernel_size=9 model.args.spec_dropou
 
 ## Use a trained Model for Inference for SMD dataset and creating error profile in npy files. 
 The SMD is processed in h5 file for each excerpts, containing audio and score information (MIDI note frame roll).
-Here is the trained model used in the paper (model folder); https://drive.google.com/drive/folders/1Eu96UOpwe8sdXP_ZWftTHp7KvoYvzAQM?usp=drive_link
+Here is the trained model used in the paper (model folder, use last.ckpt to reproduce the paper results); https://drive.google.com/drive/folders/1Eu96UOpwe8sdXP_ZWftTHp7KvoYvzAQM?usp=drive_link
+
 SMD Testset used in the paper is here (test_data); https://drive.google.com/drive/folders/1Eu96UOpwe8sdXP_ZWftTHp7KvoYvzAQM?usp=drive_link
 
 Set path for SMD dataset in config/inference.yaml.
