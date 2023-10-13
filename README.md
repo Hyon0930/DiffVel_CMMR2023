@@ -10,8 +10,8 @@ hyon.kim@upf.edu
 
 The flow of the blocks of code is followiong; 
 1. Train the model with MAESTRO dataset.
-2. Inferece the model with SMD dataset and create error profile npy files.
-3. Based on the error profile,
+2. Inferece the model with SMD dataset and create pair of the model estimation and ground truth of note level MIDI velosity in npy files.
+3. Based on the error profile created in the step2, export final results in csv file. 
 
 To reporduce the results, please follow the instruction below.
 
@@ -30,21 +30,18 @@ Place your directory path containing MAESTRO v2.0.0.
 data_root: set/your/path/here
 ```
 
-Training is covered by train_spec_roll.py for reproduce the DiffVel model. 
+Training is covered by train_spec_roll.py to reproduce the DiffVel model. If you do not have the MAESTRO dataset, set download=True.  
 ``` 
 python train_spec_roll.py gpus=1 model.args.kernel_size=9 model.args.spec_dropout=0 dataset=MAESTRO dataloader.train.num_workers=8 epochs=2000 download=False
 ```
 
 
 ## Use a trained Model for Inference for SMD dataset and Creating Error Profile npy files. 
-The SMD is processed in h5 file for each excerpts, containing audio and score information.
-The data is found here; 
-
-Set path for SMD dataset in config/inference.yaml.
+The SMD is processed in h5 file for each excerpts, containing audio and score information (MIDI note frame roll).
 Here is the trained model used in the paper (model folder); https://drive.google.com/drive/folders/1Eu96UOpwe8sdXP_ZWftTHp7KvoYvzAQM?usp=drive_link
-
 SMD Testset used in the paper is here (test_data); https://drive.google.com/drive/folders/1Eu96UOpwe8sdXP_ZWftTHp7KvoYvzAQM?usp=drive_link
 
+Set path for SMD dataset in config/inference.yaml.
 
 ```
 Place your trained model ckpt file at "comp_modelckpt" 
@@ -67,7 +64,7 @@ Here is the estimation results and ground truth pairs in npy file used in the pa
 
 
 ```
-python post_processing.py --output_dir "path/to/your/output/dir/for/results" --pair_pkl_dir "path/to/your/pair/pkl/dir" 
+python post_processing_gnoise.py --output_dir "path/to/your/output/dir/for/results" --pair_pkl_dir "path/to/your/pair/pkl/dir" 
 
 ```
 This script outputs final estimation results of the model in csv format for each excerpts focusing on MIDI velocity estimation. 
